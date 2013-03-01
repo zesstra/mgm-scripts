@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MudletPackage>
+<MudletPackage version="1.0">
+    <ScriptPackage>
+        <ScriptGroup isActive="yes" isFolder="yes">
+            <name>GMCP-Scripts</name>
+            <packageName></packageName>
+            <script>-------------------------------------------------
+--         Put your Lua functions here.        --
+--                                             --
+-- Note that you can also use external Scripts --
+-------------------------------------------------
+</script>
+            <eventHandlerList/>
+            <Script isActive="yes" isFolder="no">
+                <name>Display all</name>
+                <packageName></packageName>
+                <script>display(gmcp)
+</script>
+                <eventHandlerList/>
+            </Script>
+            <Script isActive="yes" isFolder="no">
+                <name>Loginhandler</name>
+                <packageName></packageName>
+                <script>function Loginhandler()
+	sendGMCP( [[Core.Supports.Debug 20 ]])
+--	sendGMCP( [[Core.Supports.Set [ &quot;MG.char 1&quot; ] ]])
+    sendGMCP( [[Core.Supports.Remove [ &quot;Char 1&quot; ] ]])		-- Wie kriegt man gmod dazu, wenn man nicht weiss, auf welchen User der Char registriert hat?
+    gmod.registerUser(&quot;MG-Package&quot;)
+    gmod.enableModule(&quot;MG-Package&quot;, &quot;MG.char&quot;)
+    gmod.enableModule(&quot;MG-Package&quot;, &quot;MG.room&quot;)
+  	mainWidth, mainHeight = getMainWindowSize()
+  	createGauge(&quot;healthbar&quot;,150,20,mainWidth-380, mainHeight-40, nil, 0, 255, 50)
+  	createGauge(&quot;manabar&quot;,150, 20,mainWidth-380, mainHeight-20, nil, 0, 50, 200)
+end</script>
+                <eventHandlerList>
+                    <string>gmcp.Char</string>
+                </eventHandlerList>
+            </Script>
+            <Script isActive="yes" isFolder="no">
+                <name>update_vitals</name>
+                <packageName></packageName>
+                <script>function update_vitals()
+  setGauge(&quot;healthbar&quot;,gmcp.MG.char.vitals.hp,gmcp.MG.char.maxvitals.max_hp, &quot;&quot;..gmcp.MG.char.vitals.hp .. &quot;/&quot; ..gmcp.MG.char.maxvitals.max_hp..&quot;&quot;)
+  setGauge(&quot;manabar&quot;,gmcp.MG.char.vitals.sp,gmcp.MG.char.maxvitals.max_sp, &quot;&quot;..gmcp.MG.char.vitals.sp .. &quot;/&quot; ..gmcp.MG.char.maxvitals.max_sp..&quot;&quot;)
+end</script>
+                <eventHandlerList>
+                    <string>gmcp.MG.char.vitals</string>
+                    <string>gmcp.MG.char.maxvitals</string>
+                </eventHandlerList>
+            </Script>
+            <Script isActive="yes" isFolder="no">
+                <name>setPoisonStatus</name>
+                <packageName></packageName>
+                <script>-- function setPoisonStatus()
+--  if gmcp.MG.char.vitals.poison == 0 then
+--    setBackgroundColor(&quot;healthbar&quot;, 0, 255, 50, 255)
+--  else 
+--    setBackgroundColor(&quot;healthbar&quot;, 255, 0, 0, 255)
+--  end
+--end
+function setPoisonStatus()
+  val = gmcp.MG.char.vitals.poison
+  if val == 0 then
+    r = 0
+    g = 255
+    b = 50
+  else  -- Farbuebergang gelb-&gt;orange-&gt;rot 
+    r = 255
+    g = 255-val*25
+    b = 0
+  end
+  setBackgroundColor(&quot;healthbar&quot;, r, g, b, 255)
+end</script>
+                <eventHandlerList>
+                    <string>gmcp.MG.char.vitals</string>
+                </eventHandlerList>
+            </Script>
+        </ScriptGroup>
+    </ScriptPackage>
+</MudletPackage>

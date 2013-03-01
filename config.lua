@@ -1,0 +1,2 @@
+mpackage = "MG-Scripts"
+
